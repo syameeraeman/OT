@@ -709,10 +709,15 @@
             }
             #schedule-modal {
                 padding: 0 16px;
+                align-items: center;
+                justify-content: center;
             }
             #schedule-modal > div {
                 min-width: 280px;
+                max-width: 90vw;
                 padding: 24px 20px;
+                margin: 20px;
+                border-radius: 12px;
             }
             /* Fix Start Time alignment */
             label[style*="display:flex"] {
@@ -1089,15 +1094,27 @@
             return `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
         }
 
+        // Helper function to handle dates without timezone issues
+        function getLocalDateString(dateString) {
+            // Parse the date string and create a local date
+            const [year, month, day] = dateString.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // month is 0-indexed
+            return date.toISOString().split('T')[0];
+        }
+
         function addSchedule(dateString) {
             const modal = document.getElementById('schedule-modal');
             const form = document.getElementById('schedule-form');
             const dateInput = document.getElementById('schedule-date');
             const deleteBtn = document.getElementById('deleteScheduleBtn');
             
-            dateInput.value = dateString;
+            // Use the helper function to get correct local date
+            const localDateString = getLocalDateString(dateString);
+            dateInput.value = localDateString;
+            
             deleteBtn.style.display = 'none';
             form.reset();
+            dateInput.value = localDateString; // Set again after reset
             
             modal.style.display = 'flex';
         }
@@ -1108,7 +1125,10 @@
             const schedule = schedules[dateString];
             const deleteBtn = document.getElementById('deleteScheduleBtn');
             
-            document.getElementById('schedule-date').value = dateString;
+            // Use the helper function to get correct local date
+            const localDateString = getLocalDateString(dateString);
+            
+            document.getElementById('schedule-date').value = localDateString;
             document.getElementById('schedule-start').value = schedule.startTime;
             document.getElementById('schedule-hours').value = schedule.workHours;
             document.getElementById('schedule-ot').value = schedule.otHours;
@@ -1175,11 +1195,15 @@
         // Schedule modal event listeners
         document.getElementById('schedule-form').onsubmit = (e) => {
             e.preventDefault();
-            const dateString = document.getElementById('schedule-date').value;
+            const dateInput = document.getElementById('schedule-date');
             const startTime = document.getElementById('schedule-start').value;
             const workHours = parseFloat(document.getElementById('schedule-hours').value);
             const otHours = parseFloat(document.getElementById('schedule-ot').value);
             const notes = document.getElementById('schedule-notes').value;
+            
+            // Use the helper function to get correct local date
+            const dateString = getLocalDateString(dateInput.value);
+            const selectedDate = new Date(dateString + 'T00:00:00');
             
             schedules[dateString] = {
                 startTime,
@@ -1195,7 +1219,11 @@
         };
 
         document.getElementById('deleteScheduleBtn').onclick = () => {
-            const dateString = document.getElementById('schedule-date').value;
+            const dateInput = document.getElementById('schedule-date');
+            // Use the helper function to get correct local date
+            const dateString = getLocalDateString(dateInput.value);
+            const selectedDate = new Date(dateString + 'T00:00:00');
+            
             if (confirm('Delete this schedule?')) {
                 delete schedules[dateString];
                 localStorage.setItem('workSchedules', JSON.stringify(schedules));
