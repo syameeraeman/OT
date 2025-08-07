@@ -178,6 +178,7 @@
             .header-credit {
                 right: 12px;
                 font-size: 0.7rem;
+                margin-top: 1px;
             }
             button {
                 padding: 12px 0;
@@ -242,14 +243,12 @@
             transform: scale(1.05);
         }
         .header-credit {
-            position: absolute;
-            right: 18px;
-            bottom: 6px;
             font-size: 0.75rem;
             font-weight: 400;
             color: #c5cae9;
             letter-spacing: 0.5px;
             transition: color var(--transition-fast);
+            margin-top: 2px;
         }
         .theme-switcher {
             position: absolute;
@@ -688,47 +687,16 @@
         /* Enhanced mobile experience */
         @media (max-width: 480px) {
             .input-row {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row;
+                align-items: center;
                 gap: 8px;
+                flex-wrap: wrap;
             }
             .input-row input[type="number"],
             .input-row select {
-                width: 100%;
+                width: auto;
                 text-align: center;
-            }
-            /* Special styling for Start Time row on mobile */
-            .start-time-row {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                flex-wrap: nowrap;
-                margin-top: 8px;
-            }
-            .start-time-row input[type="number"] {
-                width: 60px;
-                text-align: center;
-                font-size: 1rem;
-                padding: 10px 8px;
-                border-radius: 8px;
-                border: 1px solid var(--border-color);
-                background: var(--card-background);
-            }
-            .start-time-row select {
-                width: 70px;
-                text-align: center;
-                font-size: 1rem;
-                padding: 10px 8px;
-                border-radius: 8px;
-                border: 1px solid var(--border-color);
-                background: var(--card-background);
-            }
-            .time-separator {
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: var(--text-secondary);
-                margin: 0 4px;
+                min-width: 60px;
             }
             .calendar-day {
                 aspect-ratio: 1;
@@ -745,6 +713,24 @@
             #schedule-modal > div {
                 min-width: 280px;
                 padding: 24px 20px;
+            }
+            /* Fix Start Time alignment */
+            label[style*="display:flex"] {
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 8px !important;
+            }
+            label[style*="display:flex"] .input-row {
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 4px !important;
+            }
+            label[style*="display:flex"] .input-row input {
+                width: 50px !important;
+                text-align: center !important;
+            }
+            label[style*="display:flex"] .input-row select {
+                width: 60px !important;
             }
         }
 
@@ -782,66 +768,17 @@
                 min-height: 44px;
                 min-width: 44px;
             }
-            /* Enhanced input styling for mobile */
-            input[type="number"], 
-            input[type="text"], 
-            select {
-                font-size: 16px; /* Prevents zoom on iOS */
-                padding: 12px 8px;
-                border-radius: 8px;
-                border: 1px solid var(--border-color);
-                background: var(--card-background);
-                transition: all var(--transition-fast);
+            /* Improve Start Time layout on mobile */
+            .input-row {
+                gap: 6px;
             }
-            input[type="number"]:focus, 
-            input[type="text"]:focus, 
-            select:focus {
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(57,73,171,0.1);
-                transform: translateY(-1px);
+            .input-row input[type="number"] {
+                min-width: 50px;
+                padding: 8px 6px;
             }
-            /* Better spacing for mobile forms */
-            label {
-                margin-top: 16px;
-                margin-bottom: 8px;
-                font-size: 1rem;
-                font-weight: 600;
-                color: var(--text-primary);
-            }
-        }
-
-        /* Additional mobile optimizations for Start Time */
-        @media (max-width: 480px) {
-            .start-time-row {
-                background: var(--background-color);
-                padding: 12px;
-                border-radius: 10px;
-                border: 1px solid var(--border-color);
-                margin-top: 12px;
-            }
-            .start-time-row input[type="number"] {
-                background: var(--card-background);
-                border: 2px solid var(--border-color);
-                font-weight: 600;
-            }
-            .start-time-row input[type="number"]:focus {
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(57,73,171,0.1);
-            }
-            .start-time-row select {
-                background: var(--card-background);
-                border: 2px solid var(--border-color);
-                font-weight: 600;
-            }
-            .start-time-row select:focus {
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(57,73,171,0.1);
-            }
-            .time-separator {
-                font-size: 1.4rem;
-                font-weight: 700;
-                color: var(--primary-color);
-                margin: 0 8px;
+            .input-row select {
+                min-width: 60px;
+                padding: 8px 6px;
             }
         }
     </style>
@@ -849,8 +786,10 @@
 <body>
     <header class="header">
         <img src="https://images.seeklogo.com/logo-png/55/1/stratus-automation-logo-png_seeklogo-559561.png" alt="Stratus Automation Logo" class="header-logo">
-        <span>Stratus Automation</span>
-        <span class="header-credit">Page Updated by Syamir</span>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <span>Stratus Automation</span>
+            <span class="header-credit">Page Updated by Syamir</span>
+        </div>
         <button id="theme-switcher" class="theme-switcher" title="Change Theme">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="5"></circle>
@@ -874,9 +813,8 @@
                 </label>
                 <label style="display:flex; align-items:center; gap:12px; margin-top:12px;">
                     <span style="min-width:90px;">Start Time:</span>
-                    <div class="input-row start-time-row" style="margin-top:0;">
-                        <input type="number" id="startHour" min="1" max="12" value="7" required style="width:48px;"> 
-                        <span class="time-separator">:</span>
+                    <div class="input-row" style="margin-top:0;">
+                        <input type="number" id="startHour" min="1" max="12" value="7" required style="width:48px;"> :
                         <input type="number" id="startMinute" min="0" max="59" value="00" required style="width:48px;">
                         <select id="ampm">
                             <option value="AM" selected>AM</option>
