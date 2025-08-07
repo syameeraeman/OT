@@ -737,6 +737,12 @@
             label[style*="display:flex"] .input-row select {
                 width: 60px !important;
             }
+            /* Mobile schedule buttons */
+            .schedule-btn {
+                min-width: 120px !important;
+                padding: 10px 16px !important;
+                font-size: 0.85rem !important;
+            }
         }
 
         /* Loading indicators */
@@ -785,6 +791,26 @@
                 min-width: 60px;
                 padding: 8px 6px;
             }
+        }
+
+        /* Schedule buttons styling */
+        .schedule-btn {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .schedule-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .schedule-btn:active {
+            transform: translateY(0);
+        }
+        .schedule-btn svg {
+            transition: transform 0.2s ease;
+        }
+        .schedule-btn:hover svg {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -1068,9 +1094,21 @@
                         <div style="font-size: 1.1rem; font-weight: 600;">${otEndTime}</div>
                     </div>
                     ${schedule.notes ? `<div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #e3e6ee; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"><div style="font-weight: 600; color: #3949ab; margin-bottom: 4px;">📝 Notes:</div><div style="color: #333; line-height: 1.4;">${schedule.notes}</div></div>` : ''}
-                    <div style="display: flex; gap: 8px;">
-                        <button onclick="editSchedule('${dateString}')" style="background: linear-gradient(135deg, #3949ab, #283593); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 0.9rem; cursor: pointer; font-weight: 500; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s; flex: 1;">✏️ Edit Schedule</button>
-                        <button onclick="copyScheduleToCalculator('${dateString}')" style="background: linear-gradient(135deg, #ff9800, #f57c00); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 0.9rem; cursor: pointer; font-weight: 500; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s;">📋 Copy to Calculator</button>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button onclick="editSchedule('${dateString}')" class="schedule-btn" style="background: linear-gradient(135deg, #3949ab, #283593); color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-size: 0.9rem; cursor: pointer; font-weight: 500; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex: 1; min-width: 140px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Edit Schedule
+                        </button>
+                        <button onclick="copyScheduleToCalculator('${dateString}')" class="schedule-btn" style="background: linear-gradient(135deg, #ff9800, #f57c00); color: #fff; border: none; border-radius: 8px; padding: 12px 18px; font-size: 0.9rem; cursor: pointer; font-weight: 500; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; min-width: 160px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            Copy to Calculator
+                        </button>
                     </div>
                 `;
             } else {
